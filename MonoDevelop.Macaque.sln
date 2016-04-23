@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoDevelop.Macaque", "MonoDevelop.Macaque\MonoDevelop.Macaque.csproj", "{8D343AB7-1E00-4CC2-A7B6-92F6405560C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{D7DB3C04-90A9-4F7F-83DB-7906F39D7215}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		TODO.md = TODO.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D343AB7-1E00-4CC2-A7B6-92F6405560C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D343AB7-1E00-4CC2-A7B6-92F6405560C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D343AB7-1E00-4CC2-A7B6-92F6405560C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D343AB7-1E00-4CC2-A7B6-92F6405560C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
