@@ -1,5 +1,5 @@
-﻿//
-// TipView.User.cs
+//
+// Tip.cs
 //
 // Author:
 //       Mikayla Hutchinson <m.j.hutchinson@gmail.com>
@@ -24,27 +24,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using CommonMark;
+using System;
 
 namespace MonoDevelop.Macaque
 {
-	partial class TipView
+
+	class Tip
 	{
-		readonly Tip tip;
-
-		internal TipView (Tip tip)
+		public Tip (string id, string title, string content, Priority priority)
 		{
-			this.tip = tip;
-		}
+			if (content == null)
+				throw new ArgumentNullException (nameof (content));
+			if (title == null)
+				throw new ArgumentNullException (nameof (title));
+			if (id == null)
+				throw new ArgumentNullException (nameof (id));
 
-		void RenderMessage ()
-		{
-			var document = CommonMarkConverter.Parse (tip.Content);
-			using (var writer = new System.IO.StringWriter ()) {
-				CommonMarkConverter.ProcessStage3 (document, writer);
-				WriteLiteral (writer.ToString ());
-			}
+			Id = id;
+			Title = title;
+			Content = content;
+			Priority = priority;
 		}
+		
+		public string Id { get; }
+		public string Title { get; }
+		public string Content { get; }
+		public Priority Priority { get; }
+	}
+
+	enum Priority
+	{
+		High,
+		Normal,
+		Low
 	}
 }
-

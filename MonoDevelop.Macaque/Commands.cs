@@ -24,15 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Linq;
 using AppKit;
 using Foundation;
 using MonoDevelop.Components.Commands;
+using MonoDevelop.Core;
 using MonoDevelop.Ide;
 using MonoDevelop.Macaque.Mac;
 using MonoDevelop.MacInterop;
-using MonoDevelop.Core;
-using System;
 
 namespace MonoDevelop.Macaque
 {
@@ -81,16 +81,18 @@ namespace MonoDevelop.Macaque
 
 			using (var tipWindow = InflateFromNibResource<TipWindow> ("__xammac_content_TipWindow.nib")) {
 				tipWindow.ParentWindow = oldMainWindow;
-				tipWindow.MakeKeyAndOrderFront (null);
+				tipWindow.MakeKeyAndOrderFront (tipWindow);
 				tipWindow.ShowAtStartup = StartupHandler.ShowAtStartup;
 
 				FilePath basePath = Mono.Addins.AddinManager.CurrentAddin.GetFilePath ("content");
 
-				int i = 1;
+				var tipLoader = new TipLoader ();
+				tipLoader.LoadTips ().Wait ();
+
 				EventHandler nextMessage = (sender, e) => {
-					var html = new TipView { Message = $"Tip {i}" }.GenerateString ();
+					var tip = tipLoader.GetNextTip ();
+					var html = new TipView (tip).GenerateString ();
 					tipWindow.LoadHtml (html, basePath);
-					i++;
 				};
 
 				tipWindow.NextTipClicked += nextMessage;

@@ -1,5 +1,33 @@
 ﻿body {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffe6cd+0,ffd5de+53,dad7f7+100 */
-    background: -webkit-linear-gradient(-45deg, #ffe6cd 0%,#ffd5de 53%,#dad7f7 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(135deg, #ffe6cd 0%,#ffd5de 53%,#dad7f7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(135deg, #ffe6cd 0%,#ffd5de 53%,#dad7f7 100%);
+    padding: 6px;
+}
+
+h1 {
+    margin-top: 0;
+    font-family: "Helvetica";
+    font-size: 16pt;
+}
+
+div {
+    font-family: "Helvetica"
+    font-size: 10pt;
+}
+
+body>div {
+    background: #ffffff;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+}
+
+img {
+    box-shadow: 0 0 5px #BBBBBB;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

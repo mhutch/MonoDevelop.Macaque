@@ -1,9 +1,10 @@
 # TODO
 
-* Tip loader
-* Some tips!
+* Tip randomization!
+* Remember last time each tip was shown
+* More tips!
 * Render commands in popup window from real name and shortcut
-* Render popup window with HTML?
+* Make HTML pretty
 * "Show me" button that shows where the command is (demonstrates? gif?)
 * "Tell me more" button?
 * Extension point for tips

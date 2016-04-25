@@ -35,6 +35,8 @@
       <DependentUpon>TipView.cshtml</DependentUpon>
     </Compile>
     <Compile Include="TipView.User.cs" />
+    <Compile Include="TipLoader.cs" />
+    <Compile Include="Tip.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
@@ -54,12 +56,21 @@
   </ItemGroup>
   <ItemGroup>
     <AddinReference Include="MonoDevelop.MacPlatform" />
+    <AddinReference Include="MonoDevelop.PackageManagement" />
+    <Reference Include="Newtonsoft.Json" />
+    <Reference Include="CommonMark">
+      <HintPath>..\packages\CommonMark.NET.0.12.0\lib\net45\CommonMark.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="content\" />
+    <Folder Include="content\images\" />
   </ItemGroup>
   <ItemGroup>
     <AddinFile Include="content\theme.css" />
+    <AddinFile Include="content\Tips.xml" />
+    <AddinFile Include="content\Tips.json" />
+    <AddinFile Include="content\images\generate-code.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MonoDevelop.Addins.0.3.1\build\net40\MonoDevelop.Addins.targets" Condition="Exists('..\packages\MonoDevelop.Addins.0.3.1\build\net40\MonoDevelop.Addins.targets')" />

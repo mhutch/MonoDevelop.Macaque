@@ -1,0 +1,63 @@
+﻿{
+	"id": "macaque.contribute",
+	"priority": "low",
+	"title": "Share the love",
+	"content":
+"
+Want to tell everyone about your favorite feature? Contribute tips at [mhut.ch/xs-tips](https://mhut.ch/xs-tips).
+"
+}
+{
+	"id": "layout.auto-hide",
+	"priority": "low",
+	"title": "Auto-hidden pads",
+	"content":
+"
+Setting pads to auto-hide is a great way to maximize your editing space.
+Double-click on the pad header to switch auto-hiding on or off.
+"
+}
+{
+	"id": "layout.maximize-document",
+	"priority": "low",
+	"title": "Maximize the document",
+	"content":
+"
+When you really want to focus on your code or design, you can maximize your editing space by double-clicking on the
+document tab to auto-hide all the pads at once. Double-click again to switch back, or use the
+[MonoDevelop.Ide.Commands.FileTabCommands.ToggleMaximize](#command) command.
+"
+}
+{
+	"id": "layout.pin-pad",
+	"priority": "low",
+	"title": "Pin search pads",
+	"content":
+"
+To preserve your search results, click on the push-pin icon to 'pin' the pad. The next search you perform will
+create a new search pad. You can pin as many pads as you want!
+"
+}
+{
+	"id": "toolbox.clipboard-history",
+	"priority": "low",
+	"title": "Clipboard history",
+	"content":
+"
+Want to use something you recently put in the clipboard with [MonoDevelop.Ide.Commands.EditCommands.Cut](#command)
+or [MonoDevelop.Ide.Commands.EditCommands.Copy](#command)? The source editor keeps clipboard history in the
+toolbox pad.
+"
+}
+{
+	"id": "code-generation.generate-code",
+	"priority": "low",
+	"title": "Generate code",
+	"content":
+"
+The [MonoDevelop.CodeGeneration.CodeGenerationCommands.ShowCodeGenerationWindow](#command) command can automatically
+generate common code patterns. For example, it can generate a constructor to assign arguments to properties:
+
+![](images/generate-code.gif)
+"
+}

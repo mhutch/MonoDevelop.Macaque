@@ -33,18 +33,30 @@ WriteLiteral(" type=\"text/css\"");
 
 WriteLiteral(" href=\"theme.css\"");
 
-WriteLiteral(">\n\t</head>\n\t<body>\n");
-
-WriteLiteral("\t\t");
+WriteLiteral(">\n\t</head>\n\t<body>\n\t\t<div>\n\t\t<h1>");
 
 
-#line 6 "TipView.cshtml"
-   Write(Message);
+#line 7 "TipView.cshtml"
+       Write(tip.Title);
 
 
 #line default
 #line hidden
-WriteLiteral("\n\t</body>\n</html>\n");
+WriteLiteral("</h1>\n");
+
+
+#line 8 "TipView.cshtml"
+		
+
+#line default
+#line hidden
+
+#line 8 "TipView.cshtml"
+          RenderMessage();
+
+#line default
+#line hidden
+WriteLiteral("\n\t\t</div>\n\t</body>\n</html>\n");
 
 }
 }

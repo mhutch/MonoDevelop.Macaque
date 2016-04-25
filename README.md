@@ -5,4 +5,4 @@ you work faster and better.
 
 ## Getting Started
 
-Macaque isn't ready just yet. CHeck back later!
+Macaque isn't ready just yet. Check back later!
