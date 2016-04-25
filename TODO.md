@@ -1,6 +1,5 @@
 # TODO
 
-* Popup window
 * Tip loader
 * Some tips!
 * Render commands in popup window from real name and shortcut

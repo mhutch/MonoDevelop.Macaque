@@ -2,7 +2,20 @@
 <ExtensionModel>
 	<Runtime>
 	</Runtime>
+	
 	<Extension path="/MonoDevelop/Ide/StartupHandlers">
-		<Class class="" />
+		<Class class="MonoDevelop.Macaque.StartupHandler" />
 	</Extension>
+	
+	<Extension path="/MonoDevelop/Ide/Commands/Help">
+		<Command id="MonoDevelop.Macaque.Commands.ShowTipWindow"
+			_label="Macaque Tips"
+			_description="Tips and tricks to help you work faster and better"
+			defaultHandler="MonoDevelop.Macaque.ShowTipWindowHandler" />
+	</Extension>
+	
+	<Extension path="/MonoDevelop/Ide/MainMenu/Help">
+		<CommandItem id="MonoDevelop.Macaque.Commands.ShowTipWindow" />
+	</Extension>
+	
 </ExtensionModel>

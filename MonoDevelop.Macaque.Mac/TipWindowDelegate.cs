@@ -1,5 +1,5 @@
 ﻿//
-// StartupHandler.cs
+// TipWindowDelegate.cs
 //
 // Author:
 //       Mikayla Hutchinson <m.j.hutchinson@gmail.com>
@@ -24,14 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using MonoDevelop.Components.Commands;
+using AppKit;
+using Foundation;
 
-namespace MonoDevelop.Macaque
+namespace MonoDevelop.Macaque.Mac
 {
-	public class StartupHandler : CommandHandler
+	class TipWindowDelegate : NSWindowDelegate
 	{
-		protected override void Run ()
+		TipWindow tipWindow;
+
+		public TipWindowDelegate (TipWindow tipWindow)
 		{
+			this.tipWindow = tipWindow;
+		}
+
+		public override void WillClose (NSNotification notification)
+		{
+			NSApplication.SharedApplication.StopModal ();
+		}
+
+		public override void DidResize (NSNotification notification)
+		{
+			tipWindow.ResizeWebContent ();
 		}
 	}
 }
