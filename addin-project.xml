@@ -1,0 +1,7 @@
+<AddinProject appVersion="6.0">
+	<Project platforms="Mac">
+		<AddinFile>bin/Debug/MonoDevelop.Macaque.dll</AddinFile>
+		<BuildFile>MonoDevelop.Macaque.sln</BuildFile>
+		<BuildConfiguration>Debug</BuildConfiguration>
+	</Project>
+</AddinProject>
