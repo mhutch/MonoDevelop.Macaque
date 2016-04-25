@@ -12,7 +12,7 @@ h1 {
 
 div {
     font-family: "Helvetica"
-    font-size: 10pt;
+    font-size: 9pt;
 }
 
 body>div {
@@ -30,6 +30,7 @@ img {
     margin-right: auto;
     margin-top: 20px;
     margin-bottom: 20px;
+    max-width: 90%;
 }
 
 .command {
