@@ -3,8 +3,7 @@
 * Tip randomization!
 * Remember last time each tip was shown
 * More tips!
-* Render commands in popup window from real name and shortcut
-* Make HTML pretty
+* Command tooltip
 * "Show me" button that shows where the command is (demonstrates? gif?)
 * "Tell me more" button?
 * Extension point for tips

@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.IO;
 using CommonMark;
 
 namespace MonoDevelop.Macaque
@@ -39,9 +40,12 @@ namespace MonoDevelop.Macaque
 
 		void RenderMessage ()
 		{
+			var settings = CommonMarkSettings.Default.Clone ();
+			settings.OutputDelegate = (doc, output, s) => new TipHtmlFormatter (output, s).WriteDocument (doc);
+
 			var document = CommonMarkConverter.Parse (tip.Content);
-			using (var writer = new System.IO.StringWriter ()) {
-				CommonMarkConverter.ProcessStage3 (document, writer);
+			using (var writer = new StringWriter ()) {
+				CommonMarkConverter.ProcessStage3 (document, writer, settings);
 				WriteLiteral (writer.ToString ());
 			}
 		}

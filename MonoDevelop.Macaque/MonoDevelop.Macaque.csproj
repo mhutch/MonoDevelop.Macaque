@@ -37,6 +37,7 @@
     <Compile Include="TipView.User.cs" />
     <Compile Include="TipLoader.cs" />
     <Compile Include="Tip.cs" />
+    <Compile Include="TipHtmlFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
