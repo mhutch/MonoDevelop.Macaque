@@ -68,7 +68,8 @@ namespace MonoDevelop.Macaque.Mac
 			webView = new WebView (frame, "FrameName", "GroupName") {
 				ShouldCloseWithWindow = true,
 				AutoresizesSubviews = true,
-				AutoresizingMask = scrollView.AutoresizingMask
+				AutoresizingMask = scrollView.AutoresizingMask,
+				PolicyDelegate = new TipPolicyDelegate (this)
 			};
 			scrollView.AddSubview (webView);
 			scrollView.AutoresizesSubviews = true;
@@ -93,6 +94,8 @@ namespace MonoDevelop.Macaque.Mac
 		}
 
 		public event EventHandler NextTipClicked;
+
+		public Func<Uri, bool> HandleUrlOpen { get; set; }
 
 		public bool ShowAtStartup {
 			get {

@@ -86,6 +86,13 @@ namespace MonoDevelop.Macaque
 
 				FilePath basePath = Mono.Addins.AddinManager.CurrentAddin.GetFilePath ("content");
 
+				tipWindow.HandleUrlOpen = s => {
+					if (s.IsFile)
+						return false;
+					DesktopService.ShowUrl (s.ToString ());
+					return true;
+				};
+
 				var tipLoader = new TipLoader ();
 				tipLoader.LoadTips ().Wait ();
 

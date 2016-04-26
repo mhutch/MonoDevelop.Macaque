@@ -53,6 +53,7 @@
       <DependentUpon>TipWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="TipWindowDelegate.cs" />
+    <Compile Include="TipPolicyDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="TipWindow.xib" />
