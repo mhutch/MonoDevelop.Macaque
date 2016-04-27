@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -54,6 +55,11 @@ namespace MonoDevelop.Macaque
 					RenderMenuItem (inline, isOpening, isClosing);
 					return;
 				}
+				if (inline.TargetUrl == "#key") {
+					ignoreChildNodes = true;
+					RenderKey (inline, isOpening, isClosing);
+					return;
+				}
 			}
 			base.WriteInline (inline, isOpening, isClosing, out ignoreChildNodes);
 		}
@@ -79,6 +85,22 @@ namespace MonoDevelop.Macaque
 					WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (binding, true));
 					Write (")");
 				}
+			}
+
+			if (isClosing) {
+				Write ("</span>");
+			}
+		}
+
+		void RenderKey (Inline inline, bool isOpening, bool isClosing)
+		{
+			if (isOpening) {
+				var binding = inline.FirstChild.LiteralContent;
+				KeyBinding b;
+				if (!KeyBinding.TryParse (binding, out b))
+					throw new Exception ($"Invalid keybinding '{binding}'");
+				Write ("<span class=\"keybinding\">");
+				WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (b, true));
 			}
 
 			if (isClosing) {
