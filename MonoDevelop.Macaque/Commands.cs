@@ -125,7 +125,9 @@ namespace MonoDevelop.Macaque
 
 			var nib = new NSNib (data, NSBundle.MainBundle);
 			NSArray topLevelObjects;
-			nib.InstantiateNibWithOwner (null, out topLevelObjects);
+			//FIXME: dummy owner, we don't need one but Xamarin.Mac currently throws
+			var owner = new NSObject ();
+			nib.InstantiateNibWithOwner (owner, out topLevelObjects);
 			var arr = NSArray.FromArray<NSObject> (topLevelObjects);
 
 			return arr.OfType<T> ().Single ();
