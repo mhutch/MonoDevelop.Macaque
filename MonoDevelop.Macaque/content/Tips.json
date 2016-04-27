@@ -1,6 +1,6 @@
 ﻿{
 	"id": "editor.suggestion-mode",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Suggestion mode",
 	"content":
 "
@@ -10,7 +10,7 @@ Double-click on the pad header to switch auto-hiding on or off.
 }
 {
 	"id": "layout.auto-hide",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Auto-hidden pads",
 	"content":
 "
@@ -20,7 +20,7 @@ Double-click on the pad header to switch auto-hiding on or off.
 }
 {
 	"id": "layout.maximize-document",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Maximize the document",
 	"content":
 "
@@ -31,7 +31,7 @@ document tab to auto-hide all the pads at once. Double-click again to switch bac
 }
 {
 	"id": "layout.pin-pad",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Pin search pads",
 	"content":
 "
@@ -41,7 +41,7 @@ create a new search pad. You can pin as many pads as you want!
 }
 {
 	"id": "toolbox.clipboard-history",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Clipboard history",
 	"content":
 "
@@ -52,7 +52,7 @@ toolbox pad.
 }
 {
 	"id": "editor.generate-code",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Generate code",
 	"content":
 "
@@ -60,11 +60,15 @@ The [MonoDevelop.CodeGeneration.CodeGenerationCommands.ShowCodeGenerationWindow]
 generate common code patterns. For example, it can generate a constructor to assign arguments to properties:
 
 ![](images/generate-code.gif)
+
+After opening the code generation window, select a generator from the upper list with the arrow keys, then hit
+[Tab](#key) to move to the lower list. Use [Space](#key) to select which items to include, then [Return](#key)
+to generate the code.
 "
 }
 {
 	"id": "preferences.keybindings",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Key bindings",
 	"content":
 "
@@ -77,7 +81,7 @@ change or add key bindings of your own.
 }
 {
 	"id": "solution.assemblybrowser",
-	"priority": "low",
+	"priority": "normal",
 	"title": "Assembly browser",
 	"content":
 "
@@ -95,5 +99,14 @@ You can open assemblies that are not part of your project using the
 Want to tell everyone about your favorite feature?
 
 You can contribute tips at [mhut.ch/xs-tips](https://mhut.ch/xs-tips).
+"
+}
+{
+	"id": "macaque.moresoon",
+	"priority": "low",
+	"title": "Coming soon...",
+	"content":
+"
+More tips will be coming soon!
 "
 }
