@@ -1,10 +1,11 @@
 ﻿{
-	"id": "macaque.contribute",
+	"id": "editor.suggestion-mode",
 	"priority": "low",
-	"title": "Share the love",
+	"title": "Suggestion mode",
 	"content":
 "
-Want to tell everyone about your favorite feature? Contribute tips at [mhut.ch/xs-tips](https://mhut.ch/xs-tips).
+Setting pads to auto-hide is a great way to maximize your editing space.
+Double-click on the pad header to switch auto-hiding on or off.
 "
 }
 {
@@ -50,7 +51,7 @@ toolbox pad.
 "
 }
 {
-	"id": "code-generation.generate-code",
+	"id": "editor.generate-code",
 	"priority": "low",
 	"title": "Generate code",
 	"content":
@@ -72,5 +73,27 @@ not shown in the menus, and you can find these in the *Key Bindings* Preferences
 change or add key bindings of your own.
 
 ![](images/key-bindings.gif)
+"
+}
+{
+	"id": "solution.assemblybrowser",
+	"priority": "low",
+	"title": "Assembly browser",
+	"content":
+"
+Double-click on an assembly in your project's References to inspect its types and members with the Assembly Browser.
+You can open assemblies that are not part of your project using the
+[MonoDevelop.Ide.Commands.FileCommands.OpenFile](#command) command.
+"
+}
+{
+	"id": "macaque.contribute",
+	"priority": "low",
+	"title": "Share the love",
+	"content":
+"
+Want to tell everyone about your favorite feature?
+
+You can contribute tips at [mhut.ch/xs-tips](https://mhut.ch/xs-tips).
 "
 }
