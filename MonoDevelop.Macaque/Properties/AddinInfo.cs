@@ -28,12 +28,12 @@ using Mono.Addins;
 using Mono.Addins.Description;
 
 [assembly: Addin(
-    "MonoDevelop.Macaque",
-    Namespace = "MonoDevelop.Macaque",
-    Version = "1.0"
+    "Macaque",
+    Namespace = "MonoDevelop",
+    Version = "0.1"
 )]
 
-[assembly: AddinName ("MonoDevelop.Macaque")]
+[assembly: AddinName ("Macaque Tips")]
 [assembly: AddinCategory ("IDE extensions")]
-[assembly: AddinDescription ("MonoDevelop.Macaque")]
-[assembly: AddinAuthor ("mhutch")]
+[assembly: AddinDescription ("Xamarin Studio Tips and Tricks")]
+[assembly: AddinAuthor ("Mikayla Hutchinson")]
