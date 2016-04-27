@@ -75,6 +75,12 @@ namespace MonoDevelop.Macaque
 
 		internal static void ShowTipWindow ()
 		{
+			var tipLoader = new TipLoader ();
+
+			if (!tipLoader.LoadTips ().Result) {
+				return;
+			}
+
 			var oldMainWindow = NSApplication.SharedApplication.KeyWindow
 				?? NSApplication.SharedApplication.MainWindow
 				?? GtkQuartz.GetWindow (MessageService.RootWindow);
@@ -92,9 +98,6 @@ namespace MonoDevelop.Macaque
 					DesktopService.ShowUrl (s.ToString ());
 					return true;
 				};
-
-				var tipLoader = new TipLoader ();
-				tipLoader.LoadTips ().Wait ();
 
 				EventHandler nextMessage = (sender, e) => {
 					var tip = tipLoader.GetNextTip ();

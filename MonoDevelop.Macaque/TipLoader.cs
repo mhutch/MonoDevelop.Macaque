@@ -38,19 +38,49 @@ namespace MonoDevelop.Macaque
 {
 	class TipLoader
 	{
-		Task tiploader;
+		const string macaqueConfigDir = "Macaque";
+		Task<bool> tiploader;
 		List<Tip> tips;
 
-		public Task LoadTips ()
+		static string ShownTipsStatePath {
+			get {
+				return UserProfile.Current.ConfigDir.Combine (macaqueConfigDir, "showntips.txt");
+			}
+		}
+
+		public Task<bool> LoadTips ()
 		{
 			return tiploader ?? (tiploader = Task.Run (() => {
 				try {
+					var stateFile = ShownTipsStatePath;
+					if (File.Exists (stateFile)) {
+						shownTips = new HashSet<string> (File.ReadAllLines (stateFile));
+					}
+				} catch (Exception ex) {
+					LoggingService.LogError ("Failed to load Macaque state", ex);
+				}
+				try {
 					var tipFile = AddinManager.CurrentAddin.GetFilePath ("content", "Tips.json");
 					tips = LoadTips (tipFile);
+					return true;
 				} catch (Exception ex) {
 					LoggingService.LogError ("Failed to load tips", ex);
 				}
+				return false;
 			}));
+		}
+
+		Task SaveShownTipsState ()
+		{
+			return Task.Run (() => {
+				try {
+					var stateFile = ShownTipsStatePath;
+					Directory.CreateDirectory (Path.GetDirectoryName (stateFile));
+					File.WriteAllLines (stateFile, shownTips);
+				} catch (Exception ex) {
+					LoggingService.LogError ("Failed to load Macaque state", ex);
+				}
+			});
 		}
 
 		HashSet<string> shownTips = new HashSet<string> ();
@@ -63,6 +93,7 @@ namespace MonoDevelop.Macaque
 			shownTips.Add (tip.Id);
 			if (shownTips.Count == tips.Count)
 				shownTips.Clear ();
+			SaveShownTipsState ();
 			return tip;
 		}
 
@@ -97,7 +128,7 @@ namespace MonoDevelop.Macaque
 				return defaultVal;
 
 			T value;
-			if (!Enum.TryParse<T> ((string)prop.Value, true, out value)) {
+			if (!Enum.TryParse ((string)prop.Value, true, out value)) {
 				throw new FormatException ($"Value '{prop.Value}' not valid for {typeof (T)}");
 			}
 
