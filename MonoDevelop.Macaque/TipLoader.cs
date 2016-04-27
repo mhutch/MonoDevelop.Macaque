@@ -27,7 +27,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Mono.Addins;
 using MonoDevelop.Core;
@@ -88,12 +87,48 @@ namespace MonoDevelop.Macaque
 
 		public Tip GetNextTip ()
 		{
-			var possibleTips = tips.Where (t => !shownTips.Contains (t.Id)).ToList ();
-			var tip = possibleTips [random.Next (0, possibleTips.Count - 1)];
+			if (tips.Count == 0)
+				throw new InvalidOperationException ("No tips loaded");
+
+			List<Tip> high = null, normal = null, low = null;
+
+			foreach (var t in tips) {
+				if (shownTips.Contains (t.Id))
+					continue;
+				switch (t.Priority) {
+				case Priority.High:
+					if (high == null)
+						high = new List<Tip> ();
+					high.Add (t);
+					break;
+				case Priority.Normal:
+					if (high != null)
+						continue;
+					if (normal == null)
+						normal = new List<Tip> ();
+					normal.Add (t);
+					break;
+				case Priority.Low:
+					if (high != null || normal != null)
+						continue;
+					if (low == null)
+						low = new List<Tip> ();
+					low.Add (t);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException ();
+				}
+			}
+
+			var tipList = high ?? normal ?? low;
+
+			var tip = tipList [random.Next (0, tipList.Count - 1)];
+
 			shownTips.Add (tip.Id);
 			if (shownTips.Count == tips.Count)
 				shownTips.Clear ();
 			SaveShownTipsState ();
+
 			return tip;
 		}
 
