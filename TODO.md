@@ -1,7 +1,6 @@
 # TODO
 
-* Tip randomization!
-* Remember last time each tip was shown
+* Remember last time each tip was shown and don't reshow
 * More tips!
 * "Show me" button that shows where the command is (demonstrates? gif?)
 * "Tell me more" button?

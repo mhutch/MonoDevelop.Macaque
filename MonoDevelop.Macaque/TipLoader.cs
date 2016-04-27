@@ -24,14 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Newtonsoft.Json;
-using System.IO;
-using Mono.Addins;
-using System.Collections.Generic;
 using System;
-using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Mono.Addins;
 using MonoDevelop.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MonoDevelop.Macaque
 {
@@ -52,11 +53,17 @@ namespace MonoDevelop.Macaque
 			}));
 		}
 
-		int i;
+		HashSet<string> shownTips = new HashSet<string> ();
+		Random random = new Random ();
 
 		public Tip GetNextTip ()
 		{
-			return tips [(i++ % tips.Count)];
+			var possibleTips = tips.Where (t => !shownTips.Contains (t.Id)).ToList ();
+			var tip = possibleTips [random.Next (0, possibleTips.Count - 1)];
+			shownTips.Add (tip.Id);
+			if (shownTips.Count == tips.Count)
+				shownTips.Clear ();
+			return tip;
 		}
 
 		static List<Tip> LoadTips (string tipFile)
