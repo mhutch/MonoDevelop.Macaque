@@ -24,11 +24,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using CommonMark;
 using CommonMark.Syntax;
-using MonoDevelop.Ide;
 using MonoDevelop.Components.Commands;
+using MonoDevelop.Ide;
 
 namespace MonoDevelop.Macaque
 {
@@ -41,38 +43,122 @@ namespace MonoDevelop.Macaque
 
 		protected override void WriteInline (Inline inline, bool isOpening, bool isClosing, out bool ignoreChildNodes)
 		{
-			if (inline.Tag == InlineTag.Link && !RenderPlainTextInlines.Peek () && inline.TargetUrl == "#command") {
-				ignoreChildNodes = true;
-				var cmd = IdeApp.CommandService.GetCommand (inline.FirstChild.LiteralContent);
-
-				if (isOpening) {
-					Write ("<span class=\"command\"");
-
-					if (cmd.Description != null) {
-						Write (" title=\"");
-						WriteEncodedHtml (cmd.Description);
-						Write ("\"");
-					}
-
-					Write (">");
-
-					WriteEncodedHtml (cmd.Text.Replace ("_", ""));
-
-					var binding = cmd.KeyBinding;
-					if (binding != null) {
-						Write (" (");
-						WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (binding, true));
-						Write (")");
-					}
+			if (inline.Tag == InlineTag.Link && !RenderPlainTextInlines.Peek ()) {
+				if (inline.TargetUrl == "#command") {
+					ignoreChildNodes = true;
+					RenderCommand (inline, isOpening, isClosing);
+					return;
 				}
-
-				if (isClosing) {
-					Write ("</span>");
+				if (inline.TargetUrl == "#menu") {
+					ignoreChildNodes = true;
+					RenderMenuItem (inline, isOpening, isClosing);
+					return;
 				}
-			} else {
-				// in all other cases the default implementation will output the correct HTML
-				base.WriteInline (inline, isOpening, isClosing, out ignoreChildNodes);
 			}
+			base.WriteInline (inline, isOpening, isClosing, out ignoreChildNodes);
+		}
+
+		void RenderCommand (Inline inline, bool isOpening, bool isClosing)
+		{
+			var cmd = IdeApp.CommandService.GetCommand (inline.FirstChild.LiteralContent);
+
+			if (isOpening) {
+				Write ("<span class=\"command\"");
+
+				Write (" title=\"");
+				RenderCommandDescription (cmd);
+				Write ("\"");
+
+				Write (">");
+
+				WriteEncodedHtml (cmd.Text.Replace ("_", ""));
+
+				var binding = cmd.KeyBinding;
+				if (binding != null) {
+					Write (" (");
+					WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (binding, true));
+					Write (")");
+				}
+			}
+
+			if (isClosing) {
+				Write ("</span>");
+			}
+		}
+
+		void RenderCommandDescription (Command cmd)
+		{
+			WriteEncodedHtml (cmd.Text.Replace ("_", ""));
+
+			var binding = cmd.KeyBinding;
+			if (binding != null) {
+				Write (" (");
+				WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (binding, true));
+				Write (")");
+			}
+
+			if (cmd.Description != null) {
+				Write ("\n\n");
+				WriteEncodedHtml (cmd.Description);
+				Write ("");
+			}
+
+			var menuPath = GetMenuPathString (cmd);
+			if (menuPath != null) {
+				Write ("\n\nMenu: ");
+				WriteEncodedHtml (menuPath);
+			}
+
+			Write ("\"");
+		}
+
+		void RenderMenuItem (Inline inline, bool isOpening, bool isClosing)
+		{
+			var cmd = IdeApp.CommandService.GetCommand (inline.FirstChild.LiteralContent);
+
+			if (isOpening) {
+				Write ("<span class=\"menu-item\">");
+				Write (GetMenuPathString (cmd));
+			}
+			if (isClosing) {
+				Write ("</span>");
+			}
+		}
+
+		static string GetMenuPathString (Command cmd)
+		{
+			CommandEntrySet menu = IdeApp.CommandService.CreateCommandEntrySet ("/MonoDevelop/Ide/MainMenu");
+			var path = FindMenuPath (menu, cmd.Id.ToString ());
+			if (path == null)
+				return null;
+
+			path.Reverse ();
+
+			var sb = new StringBuilder ();
+			foreach (var ces in path) {
+				sb.Append (ces.Name.Replace ("_", ""));
+				sb.Append (" > ");
+			}
+			sb.Append (cmd.Text.Replace ("_", ""));
+			return sb.ToString ();
+		}
+
+		static List<CommandEntrySet> FindMenuPath (CommandEntrySet ces, object cmdId)
+		{
+			foreach (CommandEntry ce in ces) {
+				if (ce.CommandId.Equals (cmdId)) {
+					return new List<CommandEntrySet> ();
+				}
+				var set = ce as CommandEntrySet;
+				if (set != null) {
+					var result = FindMenuPath (set, cmdId);
+					if (result != null) {
+						result.Add (set);
+						return result;
+					}
+				}
+			}
+			return null;
 		}
 	}
 }

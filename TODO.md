@@ -3,7 +3,6 @@
 * Tip randomization!
 * Remember last time each tip was shown
 * More tips!
-* Command tooltip
 * "Show me" button that shows where the command is (demonstrates? gif?)
 * "Tell me more" button?
 * Extension point for tips
