@@ -28,7 +28,6 @@ using System;
 
 namespace MonoDevelop.Macaque
 {
-
 	class Tip
 	{
 		public Tip (string id, string title, string content, Priority priority)

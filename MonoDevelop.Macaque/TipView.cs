@@ -56,7 +56,7 @@ WriteLiteral("</h1>\n");
 
 #line default
 #line hidden
-WriteLiteral("\n\t\t</div>\n\t</body>\n</html>\n");
+WriteLiteral("\n\t\t</div>\n\t</body>\n</html>");
 
 }
 }

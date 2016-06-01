@@ -32,6 +32,7 @@ using CommonMark;
 using CommonMark.Syntax;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Ide;
+using Mono.Addins;
 
 namespace MonoDevelop.Macaque
 {
@@ -58,6 +59,16 @@ namespace MonoDevelop.Macaque
 				if (inline.TargetUrl == "#key") {
 					ignoreChildNodes = true;
 					RenderKey (inline, isOpening, isClosing);
+					return;
+				}
+				if (inline.TargetUrl == "#pad") {
+					ignoreChildNodes = true;
+					RenderPad (inline, isOpening, isClosing);
+					return;
+				}
+				if (inline.TargetUrl == "#prefs") {
+					ignoreChildNodes = true;
+					RenderPrefs (inline, isOpening, isClosing);
 					return;
 				}
 			}
@@ -181,6 +192,48 @@ namespace MonoDevelop.Macaque
 				}
 			}
 			return null;
+		}
+
+		void RenderPad (Inline inline, bool isOpening, bool isClosing)
+		{
+			var id = inline.FirstChild.LiteralContent;
+			var pad = IdeApp.Workbench.Pads.Find (p => p.Id == id);
+			if (pad == null) {
+				throw new Exception ($"Did not find pad '{id}'");
+			}
+
+			if (isOpening) {
+				Write ("<span class=\"pad\">");
+				Write (pad.Title);
+			}
+			if (isClosing) {
+				Write ("</span>");
+			}
+		}
+
+		void RenderPrefs (Inline inline, bool isOpening, bool isClosing)
+		{
+			var id = inline.FirstChild.LiteralContent;
+			var panel = AddinManager.GetExtensionNode ("/MonoDevelop/Ide/GlobalOptionsDialog/" + id);
+			if (panel == null) {
+				throw new Exception ($"Did not find prefs panel '{id}'");
+			}
+
+			var prop = panel.GetType ().GetProperty ("Label", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+			string name = (string) prop.GetValue (panel);
+			while (panel.Parent != null && panel.Parent.GetType () == panel.GetType ()) {
+				panel = panel.Parent;
+				name = (string)prop.GetValue (panel) + " > " + name;
+			}
+
+			if (isOpening) {
+				Write ("<span class=\"prefs-panel\">");
+				Write (name);
+			}
+			if (isClosing) {
+				Write ("</span>");
+			}
 		}
 	}
 }
