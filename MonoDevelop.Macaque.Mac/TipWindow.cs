@@ -1,28 +1,29 @@
 ﻿//
-// TipWindow.cs
+// Copyright (c) Xamarin Inc.
+// Copyright (c) Microsoft Corporation.
+// All rights reserved.
 //
-// Author:
-//       Mikayla Hutchinson <m.j.hutchinson@gmail.com>
-//
-// Copyright (c) 2016 Xamarin Inc.
+// This code is licensed under the MIT License.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+// of this software and associated documentation files(the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
 // copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// furnished to do so, subject to the following conditions :
 //
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+//
+//------------------------------------------------------------------------------
 
 using System;
 using AppKit;
@@ -84,8 +85,7 @@ namespace MonoDevelop.Macaque.Mac
 
 		partial void clickClose (NSObject sender)
 		{
-			NSApplication.SharedApplication.StopModal ();
-			OrderOut (this);
+			Close ();
 		}
 
 		partial void clickNext (NSButton sender)
@@ -102,7 +102,7 @@ namespace MonoDevelop.Macaque.Mac
 				return showAtStartupCheck.State == NSCellStateValue.On;
 			}
 			set {
-				showAtStartupCheck.State = value? NSCellStateValue.On : NSCellStateValue.Off;
+				showAtStartupCheck.State = value ? NSCellStateValue.On : NSCellStateValue.Off;
 			}
 		}
 
@@ -113,16 +113,27 @@ namespace MonoDevelop.Macaque.Mac
 
 		public void Run ()
 		{
-			IntPtr session = NSApplication.SharedApplication.BeginModalSession (this);
+			RunModal ();
+		}
+
+		//webview only works on main runloop, not nested, so set up manual modal runloop
+		void RunModal ()
+		{
+			var window = this;
+			IntPtr session = NSApplication.SharedApplication.BeginModalSession (window);
 			NSRunResponse result = NSRunResponse.Continues;
 
 			while (result == NSRunResponse.Continues) {
 				using (var pool = new NSAutoreleasePool ()) {
-					// Starting with 10.10.3, it seems that this loop will never get back to NSApplication.run
-					// loop so it can do its magic and empty the event queue. Manually flush the events
-					// one by one.
-					// https://developer.apple.com/library/prerelease/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSApplication_Class/#//apple_ref/occ/instm/NSApplication/sendEvent:
-					NSApplication.SharedApplication.SendEvent (NSApplication.SharedApplication.NextEvent (NSEventMask.AnyEvent, NSDate.DistantFuture, NSRunLoop.NSDefaultRunLoopMode, true));
+					var nextEvent = NSApplication.SharedApplication.NextEvent (NSEventMask.AnyEvent, NSDate.DistantFuture, NSRunLoop.NSDefaultRunLoopMode, true);
+
+					//discard events that are not for our window, else other windows
+					//remain somewhat interactive
+					if (nextEvent.Window != window) {
+						continue;
+					}
+
+					NSApplication.SharedApplication.SendEvent (nextEvent);
 
 					// Run the window modally until there are no events to process
 					result = (NSRunResponse)(long)NSApplication.SharedApplication.RunModalSession (session);
@@ -134,5 +145,5 @@ namespace MonoDevelop.Macaque.Mac
 
 			NSApplication.SharedApplication.EndModalSession (session);
 		}
-	} 
+	}
 }
