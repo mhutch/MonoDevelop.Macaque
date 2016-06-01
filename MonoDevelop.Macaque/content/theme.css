@@ -48,3 +48,19 @@ img {
 .prefs-panel {
     color: #25CCA2;
 }
+
+th {
+    text-align: left;
+    background-color: #eeeeee;
+}
+
+th, td {
+    padding: 6px;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
