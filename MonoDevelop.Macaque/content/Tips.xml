@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Tips>
-        <TIP>The 'File -> Open file in solution' command allows you to jump quickly to any file in the solution.</TIP>
         <TIP>The key combination Control+Space can be used to activate the code completion window, if available, anywhere in the code editor.</TIP>
         <TIP>Code navigation and refactoring operations can be accessed by right-clicking on the variables, types and members in the code editor.</TIP>
         <TIP>You can control how a file is treated in your project, whether it is included in the build, embedded as a resource, included in deployment, or ignored yet still included in the file list. To change these options for each file, open the Properties Pad by going to 'View -> Properties', and select the file you want from your project file list. You can then select how the file is treated by changing the 'Build -> Build Action' option the the Properties tab.</TIP>
@@ -9,9 +8,7 @@
         <TIP>The Properties Pad provides contextual properties for many things. As well as editing widgets in the GUI designer, it can be used to set the deploy/build mode of files in the Solution Pad, the resource ID of resources, and whether a file is to be built or deployed.</TIP>
         <TIP>Additional add-ins may be available from MonoDevelop's online add-in repositories, providing new or updated functionality. To install them, go to 'Tools -> Add-in Manager', and click 'Install Add-ins'.</TIP>
         <TIP>Add XML documentation comments, which start with '///', and they will show up in tool tips and code completion.</TIP>
-        <TIP>If you have '//TODO:' and other task comments in your code, they will show up in the task list. You can customize it with your own like '//THINK:' or '//RESEARCH:'.</TIP>
         <TIP>If you get any 'Type not found' compilation errors, you may be missing a reference to a common assembly such as System or System.Xml. Edit your project's referenced assemblies by right-clicking on the 'References' folder in the Solution Pad and selecting 'Edit references'.</TIP>
         <TIP>In the source editor, right-clicking on a field will allow you to encapsulate it automatically as a property.</TIP>
         <TIP>The 'Rename' context menu command for code identifiers will automatically find and correct all references.</TIP>
-
 </Tips>

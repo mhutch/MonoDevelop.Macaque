@@ -36,7 +36,9 @@ document tab to auto-hide all the pads at once. Double-click again to switch bac
 	"content":
 "
 To preserve your search results, click on the push-pin icon to 'pin' the pad. The next search you perform will
-create a new search pad. You can pin as many pads as you want!
+create a new search pad.
+
+You can pin as many pads as you want!
 "
 }
 {
@@ -108,5 +110,75 @@ You can contribute tips at [mhut.ch/xs-tips](https://mhut.ch/xs-tips).
 	"content":
 "
 More tips will be coming soon!
+"
+}
+{
+	"id": "navigation.globalsearch",
+	"priority": "high",
+	"title": "Global Navigation",
+	"content":
+"
+The [MonoDevelop.Components.MainToolbar.Commands.NavigateTo] command allows you to quickly search and navigate your
+solution and workspace.
+
+* jump to any file, type or member in your solution
+* execute commands, including hidden commands
+* search for NuGet packages
+* start a solution-wide full-text search
+
+The search uses fuzzy camelCase matching, so you don't need to type the whole word. For example, `vico` or `viCo` would
+match `ViewController`.
+
+Simply type your search term, select an item from the results list using the arrow keys if necessary, and hit [Return](#key).
+"
+}
+{
+	"id": "navigation.globalsearch.prefixes",
+	"priority": "high",
+	"title": "Navigation filter prefixes",
+	"content":
+"
+When using the [MonoDevelop.Components.MainToolbar.Commands.NavigateTo](#command) command, you can search for a specific kind
+of result by starting your search with a filter prefix:
+
+<table>
+<tr><th>Kind     <th>Prefix       <th>Short Prefix
+<tr><td>Files    <td><pre>file:   <td><pre>f:
+<tr><td>Types    <td><pre>type:   <td><pre>t:
+<tr><td>Members  <td><pre>member: <td><pre>m:
+<tr><td>Commands <td><pre>command:<td><pre>c:
+</table>
+
+
+The [MonoDevelop.Ide.Commands.SearchCommands.GotoType](#command) and [MonoDevelop.Ide.Commands.SearchCommands.GotoFile](#command)
+commands offer a quick way to start a search with the type or file filter prefixes.
+"
+}
+{
+	"id": "navigation.globalsearch.suffixes",
+	"priority": "high",
+	"title": "Navigation line suffixes",
+	"content":
+"
+When navigating to a file using the [MonoDevelop.Components.MainToolbar.Commands.NavigateTo](#command) command,
+you can jump to a specific line by suffixing your search with a colon followed by the line number.
+
+For example, `Ma:25` could be used to jump to line 25 in the file `Main.cs`.
+
+You can use a second suffix to specify the column, e.g. `Ma:25:10` to jump to line 25, column 10 in the file Main.cs.
+
+You can also omit the filename to jump within the current file, e.g. `:24` to jump to line 24 in the current file.
+"
+}
+{
+	"id": "shell.taskpad",
+	"priority": "normal",
+	"title": "Task pad",
+	"content":
+"
+If you have `//TODO` and `//FIXME` task comments in your code, they will show up in the
+[MonoDevelop.Ide.Gui.Pads.TaskListPad](#pad) Pad.
+
+You can add your own terms in [Preferences/TaskList](#prefs) and they will be added to the list too.
 "
 }
