@@ -66,7 +66,7 @@ namespace MonoDevelop.Macaque.Mac
 			var frame = scrollView.Frame;
 			frame.X = 0;
 			frame.Y = 0;
-			webView = new WebView (frame, "FrameName", "GroupName") {
+			webView = new WebView (frame, null, null) {
 				ShouldCloseWithWindow = true,
 				AutoresizesSubviews = true,
 				AutoresizingMask = scrollView.AutoresizingMask,
