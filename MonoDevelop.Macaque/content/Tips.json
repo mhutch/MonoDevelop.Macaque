@@ -118,7 +118,7 @@ More tips will be coming soon!
 	"title": "Global Navigation",
 	"content":
 "
-The [MonoDevelop.Components.MainToolbar.Commands.NavigateTo] command allows you to quickly search and navigate your
+The [MonoDevelop.Components.MainToolbar.Commands.NavigateTo](#command) command allows you to quickly search and navigate your
 solution and workspace.
 
 * jump to any file, type or member in your solution
