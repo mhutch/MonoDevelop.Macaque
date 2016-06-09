@@ -30,10 +30,13 @@ using Mono.Addins.Description;
 [assembly: Addin(
     "Macaque",
     Namespace = "MonoDevelop",
-    Version = "0.1"
+    Version = "0.1.1"
 )]
 
 [assembly: AddinName ("Macaque Tips")]
 [assembly: AddinCategory ("IDE extensions")]
-[assembly: AddinDescription ("Xamarin Studio Tips and Tricks")]
+[assembly: AddinDescription (
+	"Macaque Tips shows you tips and tricks to help you get the " +
+	"most out of Xamarin Studio"
+)]
 [assembly: AddinAuthor ("Mikayla Hutchinson")]
