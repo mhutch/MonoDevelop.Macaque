@@ -90,6 +90,9 @@ namespace MonoDevelop.Macaque
 			if (tips.Count == 0)
 				throw new InvalidOperationException ("No tips loaded");
 
+			if (shownTips.Count == tips.Count)
+				shownTips.Clear ();
+
 			List<Tip> high = null, normal = null, low = null;
 
 			foreach (var t in tips) {
@@ -125,8 +128,10 @@ namespace MonoDevelop.Macaque
 			var tip = tipList [random.Next (0, tipList.Count - 1)];
 
 			shownTips.Add (tip.Id);
+
 			if (shownTips.Count == tips.Count)
 				shownTips.Clear ();
+
 			SaveShownTipsState ();
 
 			return tip;
