@@ -76,6 +76,9 @@ namespace MonoDevelop.Macaque.Mac
 			scrollView.AutoresizesSubviews = true;
 
 			MinSize = ContentView.Frame.Size;
+
+			//this is true by default, and messes up XM's reference counting
+			ReleasedWhenClosed = false;
 		}
 
 		internal void ResizeWebContent ()
