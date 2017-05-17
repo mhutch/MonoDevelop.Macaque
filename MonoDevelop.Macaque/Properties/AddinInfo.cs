@@ -30,7 +30,7 @@ using Mono.Addins.Description;
 [assembly: Addin(
     "Macaque",
     Namespace = "MonoDevelop",
-    Version = "0.1.1"
+    Version = "0.1.2"
 )]
 
 [assembly: AddinName ("Macaque Tips")]
