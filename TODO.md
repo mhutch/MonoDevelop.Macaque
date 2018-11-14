@@ -9,3 +9,5 @@
 * Log "was this useful" data on Azure
 * Context-dependent tips pad?
 * Step-by-step tips?
+* multi-part tips?
+* compile tips into web pages for docs?
