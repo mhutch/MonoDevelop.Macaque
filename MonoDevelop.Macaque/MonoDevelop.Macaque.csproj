@@ -55,7 +55,6 @@
     <AddinFile Include="content\layout\pin-pad.md" />
     <AddinFile Include="content\editor\clipboard-history.md" />
     <AddinFile Include="content\editor\generate-code.md" />
-    <AddinFile Include="content\preferences\keybindings.md" />
     <AddinFile Include="content\solution\assembly-browser.md" />
     <AddinFile Include="content\HOWTO.md" />
     <AddinFile Include="content\macaque\more-soon.md" />
@@ -64,9 +63,10 @@
     <AddinFile Include="content\navigation\global-search-prefixes.md" />
     <AddinFile Include="content\navigation\global-search-suffixes.md" />
     <AddinFile Include="content\shell\task-pad.md" />
-    <None Include="content\csharp\doc-comments.md" />
-    <None Include="content\editor\snippets.md" />
-    <None Include="content\core\extensions.md" />
+    <AddinFile Include="content\csharp\doc-comments.md" />
+    <AddinFile Include="content\editor\snippets.md" />
+    <AddinFile Include="content\core\images\key-bindings.gif" />
+    <AddinFile Include="content\core\keybindings.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoDevelop.Macaque.Mac\MonoDevelop.Macaque.Mac.csproj">
@@ -84,12 +84,7 @@
   <ItemGroup>
     <AddinFile Include="content\theme.css" />
     <AddinFile Include="content\Tips.xml" />
-    <AddinFile Include="content\preferences\images\key-bindings.gif" />
     <AddinFile Include="content\editor\images\generate-code.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="content\csharp\" />
-    <Folder Include="content\core\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
