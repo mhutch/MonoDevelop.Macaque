@@ -65,6 +65,7 @@
     <AddinFile Include="content\shell\task-pad.md" />
     <AddinFile Include="content\csharp\doc-comments.md" />
     <AddinFile Include="content\editor\snippets.md" />
+    <AddinFile Include="content\core\extensions.md" />
     <AddinFile Include="content\core\images\key-bindings.gif" />
     <AddinFile Include="content\core\keybindings.md" />
   </ItemGroup>
