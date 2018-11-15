@@ -49,25 +49,24 @@
       <Generator>RazorTemplatePreprocessor</Generator>
       <LastGenOutput>TipView.cs</LastGenOutput>
     </None>
-    <AddinFile Include="content\suggestion-mode.md" />
     <AddinFile Include="content\layout\auto-hide.md" />
     <AddinFile Include="content\layout\maximize-document.md" />
     <AddinFile Include="content\layout\pin-pad.md" />
     <AddinFile Include="content\editor\clipboard-history.md" />
     <AddinFile Include="content\editor\generate-code.md" />
     <AddinFile Include="content\solution\assembly-browser.md" />
-    <AddinFile Include="content\HOWTO.md" />
     <AddinFile Include="content\macaque\more-soon.md" />
     <AddinFile Include="content\macaque\contribute.md" />
     <AddinFile Include="content\navigation\global-search.md" />
     <AddinFile Include="content\navigation\global-search-prefixes.md" />
     <AddinFile Include="content\navigation\global-search-suffixes.md" />
     <AddinFile Include="content\shell\task-pad.md" />
-    <AddinFile Include="content\csharp\doc-comments.md" />
     <AddinFile Include="content\editor\snippets.md" />
     <AddinFile Include="content\core\extensions.md" />
     <AddinFile Include="content\core\images\key-bindings.gif" />
     <AddinFile Include="content\core\keybindings.md" />
+    <None Include="content\HOWTO.md" />
+    <None Include="content\csharp\doc-comments.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoDevelop.Macaque.Mac\MonoDevelop.Macaque.Mac.csproj">
@@ -78,9 +77,10 @@
   <ItemGroup>
     <AddinReference Include="MonoDevelop.MacPlatform" />
     <AddinReference Include="MonoDevelop.PackageManagement" />
-    <Reference Include="Newtonsoft.Json" />
-    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
     <PackageReference Include="MonoDevelop.Addins" version="0.4.5" />
+    <PackageReference Include="Markdig">
+      <Version>0.15.4</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <AddinFile Include="content\theme.css" />

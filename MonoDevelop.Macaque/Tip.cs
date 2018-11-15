@@ -25,29 +25,23 @@
 // THE SOFTWARE.
 
 using System;
+using Markdig.Syntax;
 
 namespace MonoDevelop.Macaque
 {
 	class Tip
 	{
-		public Tip (string id, string title, string content, Priority priority)
+		public Tip (string id, string title, MarkdownDocument content, Priority priority)
 		{
-			if (content == null)
-				throw new ArgumentNullException (nameof (content));
-			if (title == null)
-				throw new ArgumentNullException (nameof (title));
-			if (id == null)
-				throw new ArgumentNullException (nameof (id));
-
-			Id = id;
-			Title = title;
-			Content = content;
+			Id = id ?? throw new ArgumentNullException (nameof (id));
+			Title = title ?? throw new ArgumentNullException (nameof (title));
+			Content = content ?? throw new ArgumentNullException (nameof (content));
 			Priority = priority;
 		}
 		
 		public string Id { get; }
 		public string Title { get; }
-		public string Content { get; }
+		public MarkdownDocument Content { get; }
 		public Priority Priority { get; }
 	}
 

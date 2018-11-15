@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 
 using System.IO;
-using CommonMark;
+using Markdig.Renderers;
 
 namespace MonoDevelop.Macaque
 {
@@ -40,13 +40,11 @@ namespace MonoDevelop.Macaque
 
 		void RenderMessage ()
 		{
-			var settings = CommonMarkSettings.Default.Clone ();
-			settings.OutputDelegate = (doc, output, s) => new TipHtmlFormatter (output, s).WriteDocument (doc);
-
-			var document = CommonMarkConverter.Parse (tip.Content);
-			using (var writer = new StringWriter ()) {
-				CommonMarkConverter.ProcessStage3 (document, writer, settings);
-				WriteLiteral (writer.ToString ());
+			using (var sw = new StringWriter ()) {
+				var renderer = new HtmlRenderer (sw);
+				TipLoader.Pipeline.Setup (renderer);
+				renderer.Render (tip.Content);
+				WriteLiteral (sw.ToString ());
 			}
 		}
 	}

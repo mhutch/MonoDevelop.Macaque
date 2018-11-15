@@ -26,136 +26,126 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using CommonMark;
-using CommonMark.Syntax;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Ide;
 using Mono.Addins;
+using Markdig;
+using Markdig.Renderers;
+using Markdig.Renderers.Html.Inlines;
+using Markdig.Syntax.Inlines;
 
 namespace MonoDevelop.Macaque
 {
-
-	class TipHtmlFormatter : CommonMark.Formatters.HtmlFormatter
+	public static class TipFormattingExtensions
 	{
-		public TipHtmlFormatter (TextWriter target, CommonMarkSettings settings) : base (target, settings)
+		public static MarkdownPipelineBuilder WithTipLinkExtensions (this MarkdownPipelineBuilder pipeline)
+		{
+			pipeline.Extensions.Add (new TipsLinksExtension ());
+			return pipeline;
+		}
+	}
+
+	public class TipsLinksExtension : IMarkdownExtension
+	{
+		public void Setup (MarkdownPipelineBuilder pipeline)
 		{
 		}
 
-		protected override void WriteInline (Inline inline, bool isOpening, bool isClosing, out bool ignoreChildNodes)
+		public void Setup (MarkdownPipeline pipeline, IMarkdownRenderer renderer)
 		{
-			if (inline.Tag == InlineTag.Link && !RenderPlainTextInlines.Peek ()) {
-				if (inline.TargetUrl == "#command") {
-					ignoreChildNodes = true;
-					RenderCommand (inline, isOpening, isClosing);
-					return;
-				}
-				if (inline.TargetUrl == "#menu") {
-					ignoreChildNodes = true;
-					RenderMenuItem (inline, isOpening, isClosing);
-					return;
-				}
-				if (inline.TargetUrl == "#key") {
-					ignoreChildNodes = true;
-					RenderKey (inline, isOpening, isClosing);
-					return;
-				}
-				if (inline.TargetUrl == "#pad") {
-					ignoreChildNodes = true;
-					RenderPad (inline, isOpening, isClosing);
-					return;
-				}
-				if (inline.TargetUrl == "#prefs") {
-					ignoreChildNodes = true;
-					RenderPrefs (inline, isOpening, isClosing);
-					return;
-				}
-			}
-			base.WriteInline (inline, isOpening, isClosing, out ignoreChildNodes);
+			var linkRenderer = renderer.ObjectRenderers.FindExact<LinkInlineRenderer> ();
+			linkRenderer.TryWriters.Remove (TryLinkInlineRenderer);
+			linkRenderer.TryWriters.Add (TryLinkInlineRenderer);
 		}
 
-		void RenderCommand (Inline inline, bool isOpening, bool isClosing)
+		bool TryLinkInlineRenderer (HtmlRenderer renderer, LinkInline link)
 		{
-			var cmd = IdeApp.CommandService.GetCommand (inline.FirstChild.LiteralContent);
-
-			if (isOpening) {
-				Write ("<span class=\"command\"");
-
-				Write (" title=\"");
-				RenderCommandDescription (cmd);
-				Write ("\"");
-
-				Write (">");
-
-				WriteEncodedHtml (cmd.Text.Replace ("_", ""));
-
-				var binding = cmd.KeyBinding;
-				if (binding != null) {
-					Write (" (");
-					WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (binding, true));
-					Write (")");
-				}
+			switch (link.Url) {
+			case "#command":
+				RenderCommand (renderer, link.Title);
+				return true;
+			case "#menu":
+				RenderMenuItem (renderer, link.Title);
+				return true;
+			case "#key":
+				RenderKey (renderer, link.Title);
+				return true;
+			case "#pad":
+				RenderPad (renderer, link.Title);
+				return true;
+			case "#prefs":
+				RenderCommand (renderer, link.Title);
+				return true;
 			}
-
-			if (isClosing) {
-				Write ("</span>");
-			}
+			return false;
 		}
 
-		void RenderKey (Inline inline, bool isOpening, bool isClosing)
+		void RenderCommand (HtmlRenderer renderer, string commandId)
 		{
-			if (isOpening) {
-				var binding = inline.FirstChild.LiteralContent;
-				KeyBinding b;
-				if (!KeyBinding.TryParse (binding, out b))
-					throw new Exception ($"Invalid keybinding '{binding}'");
-				Write ("<span class=\"keybinding\">");
-				WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (b, true));
-			}
+			var cmd = IdeApp.CommandService.GetCommand (commandId);
 
-			if (isClosing) {
-				Write ("</span>");
-			}
-		}
+			renderer.Write ("<span class=\"command\"");
 
-		void RenderCommandDescription (Command cmd)
-		{
-			WriteEncodedHtml (cmd.Text.Replace ("_", ""));
+			renderer.Write (" title=\"");
+			RenderCommandDescription (renderer, cmd);
+			renderer.Write ("\"");
+
+			renderer.Write (">");
+
+			renderer.WriteEscape (cmd.Text.Replace ("_", ""));
 
 			var binding = cmd.KeyBinding;
 			if (binding != null) {
-				Write (" (");
-				WriteEncodedHtml (KeyBindingManager.BindingToDisplayLabel (binding, true));
-				Write (")");
+				renderer.Write (" (");
+				renderer.WriteEscape (KeyBindingManager.BindingToDisplayLabel (binding, true));
+				renderer.Write (")");
+			}
+			renderer.Write ("</span>");
+		}
+
+		void RenderKey (HtmlRenderer renderer, string keyBinding)
+		{
+			if (!KeyBinding.TryParse (keyBinding, out KeyBinding b))
+				throw new Exception ($"Invalid keybinding '{keyBinding}'");
+
+			renderer.Write ("<span class=\"keybinding\">");
+			renderer.WriteEscape (KeyBindingManager.BindingToDisplayLabel (b, true));
+			renderer.Write ("</span>");
+		}
+
+		void RenderCommandDescription (HtmlRenderer renderer, Command cmd)
+		{
+			renderer.WriteEscape (cmd.Text.Replace ("_", ""));
+
+			var binding = cmd.KeyBinding;
+			if (binding != null) {
+				renderer.Write (" (");
+				renderer.WriteEscape (KeyBindingManager.BindingToDisplayLabel (binding, true));
+				renderer.Write (")");
 			}
 
 			if (cmd.Description != null) {
-				Write ("\n\n");
-				WriteEncodedHtml (cmd.Description);
-				Write ("");
+				renderer.Write ("\n\n");
+				renderer.WriteEscape (cmd.Description);
+				renderer.Write ("");
 			}
 
 			var menuPath = GetMenuPathString (cmd);
 			if (menuPath != null) {
-				Write ("\n\nMenu: ");
-				WriteEncodedHtml (menuPath);
+				renderer.Write ("\n\nMenu: ");
+				renderer.WriteEscape (menuPath);
 			}
 
-			Write ("\"");
+			renderer.Write ("\"");
 		}
 
-		void RenderMenuItem (Inline inline, bool isOpening, bool isClosing)
+		void RenderMenuItem (HtmlRenderer renderer, string commandId)
 		{
-			var cmd = IdeApp.CommandService.GetCommand (inline.FirstChild.LiteralContent);
-
-			if (isOpening) {
-				Write ("<span class=\"menu-item\">");
-				Write (GetMenuPathString (cmd));
-			}
-			if (isClosing) {
-				Write ("</span>");
-			}
+			var cmd = IdeApp.CommandService.GetCommand (commandId);
+			renderer.Write ("<span class=\"menu-item\">");
+			renderer.Write (GetMenuPathString (cmd));
+			renderer.Write ("</span>");
 		}
 
 		static string GetMenuPathString (Command cmd)
@@ -182,8 +172,7 @@ namespace MonoDevelop.Macaque
 				if (ce.CommandId.Equals (cmdId)) {
 					return new List<CommandEntrySet> ();
 				}
-				var set = ce as CommandEntrySet;
-				if (set != null) {
+				if (ce is CommandEntrySet set) {
 					var result = FindMenuPath (set, cmdId);
 					if (result != null) {
 						result.Add (set);
@@ -194,46 +183,36 @@ namespace MonoDevelop.Macaque
 			return null;
 		}
 
-		void RenderPad (Inline inline, bool isOpening, bool isClosing)
+		void RenderPad (HtmlRenderer renderer, string padId)
 		{
-			var id = inline.FirstChild.LiteralContent;
-			var pad = IdeApp.Workbench.Pads.Find (p => p.Id == id);
+			var pad = IdeApp.Workbench.Pads.Find (p => p.Id == padId);
 			if (pad == null) {
-				throw new Exception ($"Did not find pad '{id}'");
+				throw new Exception ($"Did not find pad '{padId}'");
 			}
 
-			if (isOpening) {
-				Write ("<span class=\"pad\">");
-				Write (pad.Title);
-			}
-			if (isClosing) {
-				Write ("</span>");
-			}
+			renderer.Write ("<span class=\"pad\">");
+			renderer.Write (pad.Title);
+			renderer.Write ("</span>");
 		}
 
-		void RenderPrefs (Inline inline, bool isOpening, bool isClosing)
+		void RenderPrefs (HtmlRenderer renderer, string path)
 		{
-			var id = inline.FirstChild.LiteralContent;
-			var panel = AddinManager.GetExtensionNode ("/MonoDevelop/Ide/GlobalOptionsDialog/" + id);
+			var panel = AddinManager.GetExtensionNode ("/MonoDevelop/Ide/GlobalOptionsDialog/" + path);
 			if (panel == null) {
-				throw new Exception ($"Did not find prefs panel '{id}'");
+				throw new Exception ($"Did not find prefs panel '{path}'");
 			}
 
 			var prop = panel.GetType ().GetProperty ("Label", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
-			string name = (string) prop.GetValue (panel);
+			string name = (string)prop.GetValue (panel);
 			while (panel.Parent != null && panel.Parent.GetType () == panel.GetType ()) {
 				panel = panel.Parent;
 				name = (string)prop.GetValue (panel) + " > " + name;
 			}
 
-			if (isOpening) {
-				Write ("<span class=\"prefs-panel\">");
-				Write (name);
-			}
-			if (isClosing) {
-				Write ("</span>");
-			}
+			renderer.Write ("<span class=\"prefs-panel\">");
+			renderer.Write (name);
+			renderer.Write ("</span>");
 		}
 	}
 }

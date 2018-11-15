@@ -31,4 +31,5 @@ description.
 * #key: A keyboard key. The argument is the GTK# key name.
 * #prefs: The ID of a preferences panel section (its sub-path under the
   `/MonoDevelop/Ide/GlobalOptionsDialog` extension point).
-* #pad: The ID of a pad.
+* #pad: A pad. the argument is the ID of the pad.
+* #menu: A main menu item. The ID is the command ID.

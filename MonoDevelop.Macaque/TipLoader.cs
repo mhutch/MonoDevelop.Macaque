@@ -27,16 +27,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Mono.Addins;
 using MonoDevelop.Core;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Markdig;
+using Markdig.Syntax;
 
 namespace MonoDevelop.Macaque
 {
 	class TipLoader
 	{
+		public static readonly MarkdownPipeline Pipeline
+			= new MarkdownPipelineBuilder ().UseAdvancedExtensions ().WithTipLinkExtensions ().Build ();
+
 		const string macaqueConfigDir = "Macaque";
 		Task<bool> tiploader;
 		List<Tip> tips;
@@ -59,8 +63,9 @@ namespace MonoDevelop.Macaque
 					LoggingService.LogError ("Failed to load Macaque state", ex);
 				}
 				try {
-					var tipFile = AddinManager.CurrentAddin.GetFilePath ("content", "Tips.json");
-					tips = LoadTips (tipFile);
+					var tipDir = AddinManager.CurrentAddin.GetFilePath ("content");
+					var tipFiles = Directory.EnumerateFiles (tipDir, "*.md", SearchOption.AllDirectories);
+					tips = LoadTips (tipFiles);
 					return true;
 				} catch (Exception ex) {
 					LoggingService.LogError ("Failed to load tips", ex);
@@ -137,42 +142,34 @@ namespace MonoDevelop.Macaque
 			return tip;
 		}
 
-		static List<Tip> LoadTips (string tipFile)
+		static string IdFromPath (string path)
 		{
+			string name = Path.GetFileName (path);
+			string category = Path.GetFileName (Path.GetDirectoryName (name));
+			return category + "." + name;
+		}
+
+		static List<Tip> LoadTips (IEnumerable<string> paths)
+		{
+			//FIXME: parse frontmatter
+			//FIXME: preprocess this, don't read all the files every time
 			var tips = new List<Tip> ();
-			using (var tf = File.OpenText (tipFile))
-			using (var r = new JsonTextReader (tf) { SupportMultipleContent = true }) {
-				do {
-					if (r.TokenType == JsonToken.StartObject) {
-						tips.Add (ReadTip (r));
-					}
-				} while (r.Read ());
+			foreach (var p in paths) {
+				var text = File.ReadAllText (p);
+				var document = Markdig.Parsers.MarkdownParser.Parse (text, Pipeline);
+				var title = GetTitle (document, p);
+				tips.Add (new Tip (IdFromPath (p), text, document, Priority.Normal));
 			}
 			return tips;
 		}
 
-		static Tip ReadTip (JsonTextReader r)
+		static string GetTitle (MarkdownDocument document, string path)
 		{
-			var obj = (JObject)JToken.ReadFrom (r);
-			return new Tip (
-				(string)obj.Property ("id"),
-				(string)obj.Property ("title"),
-				(string)obj.Property ("content"),
-				EnumFromProperty<Priority> (obj.Property ("priority"))
-			);
-		}
-
-		static T EnumFromProperty<T> (JProperty prop, T defaultVal = default (T)) where T : struct
-		{
-			if (prop == null)
-				return defaultVal;
-
-			T value;
-			if (!Enum.TryParse ((string)prop.Value, true, out value)) {
-				throw new FormatException ($"Value '{prop.Value}' not valid for {typeof (T)}");
+			var title = document.Descendants<HeadingBlock> ().FirstOrDefault ();
+			if (title == null || title.Level != 1) {
+				throw new Exception ($"No toplevel heading in {path}");
 			}
-
-			return value;
+			return ((Markdig.Syntax.Inlines.LiteralInline)title.Inline.FirstChild).Content.Text;
 		}
 	}
 }
