@@ -61,29 +61,41 @@ namespace MonoDevelop.Macaque
 
 		bool TryLinkInlineRenderer (HtmlRenderer renderer, LinkInline link)
 		{
+			string GetArg ()
+			{
+				if (link.LastChild == link.FirstChild && link.FirstChild is LiteralInline lit) {
+					return lit.Content.ToString ();
+				}
+				throw new Exception ($"Link has non-literal content @ {link.Line}, {link.Column}");
+			}
+
 			switch (link.Url) {
 			case "#command":
-				RenderCommand (renderer, link.Title);
+				RenderCommand (renderer, GetArg ());
 				return true;
 			case "#menu":
-				RenderMenuItem (renderer, link.Title);
+				RenderMenuItem (renderer, GetArg ());
 				return true;
 			case "#key":
-				RenderKey (renderer, link.Title);
+				RenderKey (renderer, GetArg ());
 				return true;
 			case "#pad":
-				RenderPad (renderer, link.Title);
+				RenderPad (renderer, GetArg ());
 				return true;
 			case "#prefs":
-				RenderCommand (renderer, link.Title);
+				RenderCommand (renderer, GetArg ());
 				return true;
 			}
+
 			return false;
 		}
 
 		void RenderCommand (HtmlRenderer renderer, string commandId)
 		{
 			var cmd = IdeApp.CommandService.GetCommand (commandId);
+			if (cmd == null) {
+				throw new Exception ($"Did not find command {commandId}");
+			}
 
 			renderer.Write ("<span class=\"command\"");
 

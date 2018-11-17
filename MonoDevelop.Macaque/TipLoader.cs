@@ -39,7 +39,11 @@ namespace MonoDevelop.Macaque
 	class TipLoader
 	{
 		public static readonly MarkdownPipeline Pipeline
-			= new MarkdownPipelineBuilder ().UseAdvancedExtensions ().WithTipLinkExtensions ().Build ();
+			= new MarkdownPipelineBuilder ()
+				.UseAdvancedExtensions ()
+				.WithTipLinkExtensions ()
+				.UseYamlFrontMatter ()
+				.Build ();
 
 		const string macaqueConfigDir = "Macaque";
 		Task<bool> tiploader;
