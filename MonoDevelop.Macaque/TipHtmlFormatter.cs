@@ -143,7 +143,7 @@ namespace MonoDevelop.Macaque
 				renderer.Write ("");
 			}
 
-			var menuPath = GetMenuPathString (cmd);
+			var menuPath = GetMainMenuPathString (cmd);
 			if (menuPath != null) {
 				renderer.Write ("\n\nMenu: ");
 				renderer.WriteEscape (menuPath);
@@ -156,43 +156,60 @@ namespace MonoDevelop.Macaque
 		{
 			var cmd = IdeApp.CommandService.GetCommand (commandId);
 			renderer.Write ("<span class=\"menu-item\">");
-			renderer.Write (GetMenuPathString (cmd));
+			renderer.Write (GetMainMenuPathString (cmd));
 			renderer.Write ("</span>");
 		}
 
-		static string GetMenuPathString (Command cmd)
+		static string GetMainMenuPathString (Command cmd)
 		{
-			CommandEntrySet menu = IdeApp.CommandService.CreateCommandEntrySet ("/MonoDevelop/Ide/MainMenu");
-			var path = FindMenuPath (menu, cmd.Id.ToString ());
-			if (path == null)
-				return null;
-
-			path.Reverse ();
-
-			var sb = new StringBuilder ();
-			foreach (var ces in path) {
-				sb.Append (ces.Name.Replace ("_", ""));
-				sb.Append (" > ");
-			}
-			sb.Append (cmd.Text.Replace ("_", ""));
-			return sb.ToString ();
-		}
-
-		static List<CommandEntrySet> FindMenuPath (CommandEntrySet ces, object cmdId)
-		{
-			foreach (CommandEntry ce in ces) {
-				if (ce.CommandId.Equals (cmdId)) {
-					return new List<CommandEntrySet> ();
-				}
-				if (ce is CommandEntrySet set) {
-					var result = FindMenuPath (set, cmdId);
-					if (result != null) {
-						result.Add (set);
-						return result;
-					}
-				}
+			var path = FindMainMenuPath (cmd);
+			if (path != null) {
+				return string.Join (" > ", path);
 			}
 			return null;
+		}
+
+		static string[] FindMainMenuPath (Command cmd)
+		{
+			CommandEntrySet menu = IdeApp.CommandService.CreateCommandEntrySet ("/MonoDevelop/Ide/MainMenu");
+			var path = FindMenuPath (menu, cmd);
+			if (path != null || !Core.Platform.IsMac) {
+				return path;
+			}
+
+			menu = IdeApp.CommandService.CreateCommandEntrySet ("/MonoDevelop/Ide/AppMenu");
+			path = FindMenuPath (menu, cmd);
+			if (path != null) {
+				var r = new string [path.Length + 1];
+				r [0] = Core.BrandingService.ApplicationName;
+				Array.Copy (path, 0, r, 1, path.Length);
+				return r;
+			}
+
+			return null;
+		}
+
+		static string[] FindMenuPath (CommandEntrySet ces, Command cmd)
+		{
+			string [] FindMenuPathRec (CommandEntrySet s, int depth)
+			{
+				foreach (CommandEntry ce in s) {
+					if (ce.CommandId.Equals (cmd.Id)) {
+						var arr = new string [depth+1];
+						arr [depth] = cmd.Text.Replace ("_", "");
+						return arr;
+					}
+					if (ce is CommandEntrySet set) {
+						var result = FindMenuPathRec (set, depth + 1);
+						if (result != null) {
+							result[depth] = set.Name.Replace ("_", "");
+							return result;
+						}
+					}
+				}
+				return null;
+			}
+			return FindMenuPathRec (ces, 0);
 		}
 
 		void RenderPad (HtmlRenderer renderer, string padId)
