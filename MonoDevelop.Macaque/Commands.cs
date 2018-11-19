@@ -51,11 +51,13 @@ namespace MonoDevelop.Macaque
 
 		public static bool ShowAtStartup {
 			get {
+				// if built in tips are enabled, they override this
 				if (IdeApp.Preferences.ShowTipsAtStartup)
 					return false;
 				return showAtStartup.Value;
 			}
 			set {
+				// when enabling this, disable built in tips
 				if (value) {
 					IdeApp.Preferences.ShowTipsAtStartup.Value = false;
 				}
@@ -135,10 +137,7 @@ namespace MonoDevelop.Macaque
 			}
 
 			var nib = new NSNib (data, NSBundle.MainBundle);
-			NSArray topLevelObjects;
-			//FIXME: dummy owner, we don't need one but Xamarin.Mac currently throws
-			var owner = new NSObject ();
-			nib.InstantiateNibWithOwner (owner, out topLevelObjects);
+			nib.InstantiateNibWithOwner (null, out NSArray topLevelObjects);
 			var arr = NSArray.FromArray<NSObject> (topLevelObjects);
 
 			return arr.OfType<T> ().Single ();

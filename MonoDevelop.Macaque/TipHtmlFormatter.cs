@@ -83,7 +83,7 @@ namespace MonoDevelop.Macaque
 				RenderPad (renderer, GetArg ());
 				return true;
 			case "#prefs":
-				RenderCommand (renderer, GetArg ());
+				RenderPrefs (renderer, GetArg ());
 				return true;
 			}
 
