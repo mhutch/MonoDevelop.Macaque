@@ -31,15 +31,17 @@ namespace MonoDevelop.Macaque
 {
 	class Tip
 	{
-		public Tip (string id, string title, MarkdownDocument content, Priority priority)
+		public Tip (string id, string filename, string title, MarkdownDocument content, Priority priority)
 		{
 			Id = id ?? throw new ArgumentNullException (nameof (id));
 			Title = title ?? throw new ArgumentNullException (nameof (title));
+			Filename = filename ?? throw new ArgumentNullException (nameof (filename));
 			Content = content ?? throw new ArgumentNullException (nameof (content));
 			Priority = priority;
 		}
-		
+
 		public string Id { get; }
+		public string Filename { get; }
 		public string Title { get; }
 		public MarkdownDocument Content { get; }
 		public Priority Priority { get; }

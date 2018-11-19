@@ -90,7 +90,7 @@ namespace MonoDevelop.Macaque
 				tipWindow.MakeKeyAndOrderFront (tipWindow);
 				tipWindow.ShowAtStartup = StartupHandler.ShowAtStartup;
 
-				FilePath basePath = Mono.Addins.AddinManager.CurrentAddin.GetFilePath ("content");
+				FilePath sharedAssetsPath = Mono.Addins.AddinManager.CurrentAddin.GetFilePath ("content");
 
 				tipWindow.HandleUrlOpen = s => {
 					if (s.IsFile)
@@ -99,11 +99,19 @@ namespace MonoDevelop.Macaque
 					return true;
 				};
 
-				EventHandler nextMessage = (sender, e) => {
-					var tip = tipLoader.GetNextTip ();
-					var html = new TipView (tip).GenerateString ();
+				void nextMessage (object sender, EventArgs e)
+				{
+					string html;
+					string basePath = sharedAssetsPath;
+					try {
+						var tip = tipLoader.GetNextTip ();
+						basePath = System.IO.Path.GetDirectoryName (tip.Filename);
+						html = new TipView (tip, sharedAssetsPath).GenerateString ();
+					} catch (Exception ex) {
+						html = $"<h1>Error</h1><p>{ex.ToString ()}</p>";
+					}
 					tipWindow.LoadHtml (html, basePath);
-				};
+				}
 
 				tipWindow.NextTipClicked += nextMessage;
 				nextMessage (null, null);

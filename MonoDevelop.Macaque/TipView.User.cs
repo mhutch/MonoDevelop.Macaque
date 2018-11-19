@@ -32,10 +32,12 @@ namespace MonoDevelop.Macaque
 	partial class TipView
 	{
 		readonly Tip tip;
+		readonly string sharedAssetsPath;
 
-		internal TipView (Tip tip)
+		internal TipView (Tip tip, string sharedAssetsPath)
 		{
 			this.tip = tip;
+			this.sharedAssetsPath = sharedAssetsPath;
 		}
 
 		void RenderMessage ()

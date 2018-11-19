@@ -162,7 +162,7 @@ namespace MonoDevelop.Macaque
 				var text = File.ReadAllText (p);
 				var document = Markdig.Parsers.MarkdownParser.Parse (text, Pipeline);
 				var title = GetTitle (document, p);
-				tips.Add (new Tip (IdFromPath (p), text, document, Priority.Normal));
+				tips.Add (new Tip (IdFromPath (p), p, text, document, Priority.Normal));
 			}
 			return tips;
 		}

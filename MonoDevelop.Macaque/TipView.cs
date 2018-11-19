@@ -31,8 +31,16 @@ WriteLiteral(" rel=\"stylesheet\"");
 
 WriteLiteral(" type=\"text/css\"");
 
-WriteLiteral(" href=\"theme.css\"");
+WriteAttribute ("href", " href=\"", "\""
 
+#line 3 "TipView.cshtml"
+               , Tuple.Create<string,object,bool> ("", sharedAssetsPath
+
+#line default
+#line hidden
+, false)
+, Tuple.Create<string,object,bool> ("", "/theme.css", true)
+);
 WriteLiteral(">\n\t</head>\n\t<body>\n\t\t<div>\n");
 
 
